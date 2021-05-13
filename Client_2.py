@@ -72,10 +72,8 @@ def receive():
     """ Handles receiving of messages. """
     while True:
         try:
-            #msg = sock.recv(BUFSIZ).decode("utf8")
             msg = (sock.recv(1024)).decode()
             dec = decrypt(d, N, msg)
-            print(dec)
             msg_list.insert(tkinter.END, dec)
         except OSError:  # Possibly client has left the chat.
             break
@@ -85,8 +83,7 @@ def send(event=None):
     msg = my_msg.get()
     
     enc = encrypt(e, N, msg)
-    print(enc)
-    
+    print("Encrypted message", enc)
     my_msg.set("")  # Clears input field.
     sock.send(enc.encode())
     if msg == "#quit":
