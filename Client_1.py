@@ -7,29 +7,14 @@ from threading import Thread
 
 def generateKeys():
     e = d = N = 0
-
     p = 5099
     q = 4759
-
     N = p * q 
     phiN = (p - 1) * (q - 1)
-
-    while True:
-        e = 1013
-        if (isCoPrime(e, phiN)):
-            break
-
+    e = 1013 
     d = modularInv(e, phiN)
 
     return e, d, N
-
-def isCoPrime(p, q):
-    return gcd(p, q) == 1
-
-def gcd(p, q):
-    while q:
-        p, q = q, p % q
-    return p
 
 def egcd(a, b):
     s = 0; old_s = 1
@@ -65,7 +50,6 @@ def encrypt(e, N, msg):
     for c in msg:
         m = ord(c)
         cipher += str(pow(m, e, N)) + " "
-
     return cipher
 
 e, d, N = generateKeys()
