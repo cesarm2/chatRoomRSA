@@ -4,15 +4,16 @@ import tkinter
 from socket import AF_INET, socket, SOCK_STREAM
 from threading import Thread
 
-
-def generateKeys():
+#finds N and phi of N
+def RSA():
     e = d = N = 0
     p = 5099
     q = 4759
     N = p * q 
     phiN = (p - 1) * (q - 1)
-    e = 1013 
-    d = modularInv(e, phiN)
+    e = 1013
+    #find d using e and phi 
+    d = inverse(e, phiN)
 
     return e, d, N
 
@@ -29,13 +30,15 @@ def egcd(a, b):
     # return gcd, x, y
     return old_r, old_s, old_t
 
-def modularInv(a, b):
+#d is the inverse of e and phi
+def inverse(a, b):
     gcd, x, y = egcd(a, b)
 
     if x < 0:
         x += b
     return x
 
+#decrypts each character
 def decrypt(d, N, cipher):
     msg = ""
     parts = cipher.split()
@@ -45,6 +48,7 @@ def decrypt(d, N, cipher):
             msg += chr(pow(c, d, N))
     return msg
 
+#encrypts each character
 def encrypt(e, N, msg):
     cipher = ""
     for c in msg:
@@ -52,7 +56,7 @@ def encrypt(e, N, msg):
         cipher += str(pow(m, e, N)) + " "
     return cipher
 
-e, d, N = generateKeys()
+e, d, N = RSA()
 
 
 def receive():
